@@ -1,0 +1,34 @@
+{
+  "root": "libs/nestjs-translates",
+  "sourceRoot": "libs/nestjs-translates/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:package",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/nestjs-translates",
+        "tsConfig": "libs/nestjs-translates/tsconfig.lib.json",
+        "packageJson": "libs/nestjs-translates/package.json",
+        "main": "libs/nestjs-translates/src/index.ts",
+        "assets": ["libs/nestjs-translates/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/nestjs-translates/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/nestjs-translates"],
+      "options": {
+        "jestConfig": "libs/nestjs-translates/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

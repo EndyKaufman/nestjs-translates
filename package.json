@@ -1,0 +1,100 @@
+{
+  "name": "nestjs-translates-workspace",
+  "version": "1.0.0",
+  "description": "NestJS module for adding translations to the application, with a pipe for translating validation errors",
+  "keywords": [
+    "nestjs",
+    "translate",
+    "i18n",
+    "validation"
+  ],
+  "license": "MIT",
+  "author": "EndyKaufman <admin@site15.ru>",
+  "engines": {
+    "node": ">=15",
+    "npm": ">=7"
+  },
+  "bugs": {
+    "url": "https://github.com/EndyKaufman/nestjs-translates/issues"
+  },
+  "homepage": "https://github.com/EndyKaufman/nestjs-translates",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EndyKaufman/nestjs-translates.git"
+  },
+  "maintainers": [
+    {
+      "name": "EndyKaufman",
+      "email": "admin@site15.ru"
+    }
+  ],
+  "scripts": {
+    "rucken": "rucken",
+    "nx": "nx",
+    "start": "node dist/apps/demo/main.js",
+    "build": "npm run nx -- build demo",
+    "lib:build": "npm run generate && npm run nx -- build nestjs-translates && npm run lib:build-changelog",
+    "lib:release": "standard-version",
+    "lib:publish": "npm publish ./dist/libs/nestjs-translates",
+    "lib:create-release": "npm run test && npm run lib:build && npm run lib:release && git push --follow-tags origin develop",
+    "lib:build-changelog": "./node_modules/.bin/cp-cli ./CHANGELOG.md ./dist/libs/nestjs-translates/CHANGELOG.md",
+    "test": "npm run nx -- test demo --skip-nx-cache --json --outputFile=jest.result.json --testLocationInResults",
+    "serve": "npm run nx -- serve demo",
+    "serve:local": "export $(xargs < ./.env.local) > /dev/null 2>&1 && npm run serve",
+    "prepare": "husky install",
+    "lint": "npm run tsc:lint && nx workspace-lint && npm run nx -- run-many --target=lint --all",
+    "lint:fix": "npm run tsc:lint && nx workspace-lint --fix && nx run-many --target=lint --all --fix && nx format:write --all",
+    "tsc:lint": "tsc --noEmit -p tsconfig.base.json",
+    "generate": "npm run rucken -- make-ts-list version-update && npm run lint:fix"
+  },
+  "private": true,
+  "devDependencies": {
+    "@nestjs/schematics": "^8.0.0",
+    "@nestjs/testing": "^8.0.0",
+    "@nrwl/cli": "13.8.3",
+    "@nrwl/eslint-plugin-nx": "13.8.3",
+    "@nrwl/jest": "13.8.3",
+    "@nrwl/js": "13.8.3",
+    "@nrwl/linter": "13.8.3",
+    "@nrwl/nest": "13.8.3",
+    "@nrwl/node": "13.8.3",
+    "@nrwl/tao": "13.8.3",
+    "@nrwl/workspace": "13.8.3",
+    "@types/jest": "27.0.2",
+    "@types/mustache": "^4.1.2",
+    "@types/node": "14.14.33",
+    "@types/supertest": "^2.0.11",
+    "@typescript-eslint/eslint-plugin": "~5.10.0",
+    "@typescript-eslint/parser": "~5.10.0",
+    "cp-cli": "^2.0.0",
+    "eslint": "~8.7.0",
+    "eslint-config-prettier": "8.1.0",
+    "husky": "^7.0.4",
+    "jest": "27.2.3",
+    "lint-staged": "^12.3.4",
+    "prettier": "2.5.1",
+    "rucken": "^3.4.1",
+    "standard-version": "^9.3.2",
+    "supertest": "^6.2.2",
+    "ts-jest": "27.0.5",
+    "typescript": "~4.3.5"
+  },
+  "dependencies": {
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/core": "^8.0.0",
+    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.0",
+    "class-transformer": "^0.5.1",
+    "class-validator-multi-lang": "^0.130.201",
+    "env-var": "^7.1.1",
+    "mustache": "^4.2.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.0.0",
+    "swagger-ui-express": "^4.3.0",
+    "tslib": "^2.0.0"
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --fix",
+    "*.{js,ts,css,scss,md}": "prettier --ignore-unknown --write"
+  }
+}

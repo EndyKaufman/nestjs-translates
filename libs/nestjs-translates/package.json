@@ -1,0 +1,42 @@
+{
+  "name": "nestjs-translates",
+  "version": "1.0.1",
+  "description": "NestJS module for adding translations to the application, with a pipe for translating validation errors",
+  "keywords": [
+    "nestjs",
+    "translate",
+    "i18n",
+    "validation"
+  ],
+  "license": "MIT",
+  "author": "EndyKaufman <admin@site15.ru>",
+  "engines": {
+    "node": ">=15",
+    "npm": ">=7"
+  },
+  "bugs": {
+    "url": "https://github.com/EndyKaufman/nestjs-translates/issues"
+  },
+  "homepage": "https://github.com/EndyKaufman/nestjs-translates",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EndyKaufman/nestjs-translates.git"
+  },
+  "maintainers": [
+    {
+      "name": "EndyKaufman",
+      "email": "admin@site15.ru"
+    }
+  ],
+  "peerDependencies": {
+    "@nestjs/common": "*",
+    "@nestjs/core": "*",
+    "reflect-metadata": "*",
+    "class-validator": "*",
+    "class-transformer": "*",
+    "class-validator-multi-lang": "**"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}
