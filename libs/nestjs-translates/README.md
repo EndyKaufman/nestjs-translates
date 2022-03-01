@@ -9,7 +9,13 @@ npm i --save nestjs-translates class-validator-multi-lang class-transformer
 
 ## Links
 
+https://github.com/EndyKaufman/nestjs-translates - Source code
+
 https://nestjs-translates.site15.ru/api - Demo application with nestjs-translates.
+
+https://dev.to/endykaufman/nestjs-module-for-adding-translations-to-the-application-with-a-pipe-for-translating-validation-errors-2mf3 - Post in dev.to
+
+https://twitter.com/KaufmanEndy/status/1498730314339954695?s=20&t=FwCcltTG-Vxut6M3JVPsCA - Twitter post
 
 ## Usage
 
