@@ -3,6 +3,8 @@
 [![npm version](https://badge.fury.io/js/nestjs-translates.svg)](https://badge.fury.io/js/nestjs-translates)
 [![monthly downloads](https://badgen.net/npm/dm/nestjs-translates)](https://www.npmjs.com/package/nestjs-translates)
 
+NestJS module for adding translations to the application, with a pipe for translating validation errors
+
 ## Installation
 
 ```bash
@@ -14,6 +16,8 @@ npm i --save nestjs-translates class-validator-multi-lang class-transformer
 https://github.com/EndyKaufman/nestjs-translates - Source code
 
 https://nestjs-translates.site15.ru/api - Demo application with nestjs-translates.
+
+https://github.com/EndyKaufman/nestjs-translates-example - Example generated with nest cli
 
 https://dev.to/endykaufman/nestjs-module-for-adding-translations-to-the-application-with-a-pipe-for-translating-validation-errors-2mf3 - Post in dev.to
 

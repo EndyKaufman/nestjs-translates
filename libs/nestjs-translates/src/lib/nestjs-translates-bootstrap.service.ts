@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  Logger,
-  OnApplicationBootstrap,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import {
   TranslatesConfig,
   TRANSLATES_CONFIG,
@@ -11,7 +6,7 @@ import {
 import { TranslatesStorage } from './nestjs-translates.storage';
 
 @Injectable()
-export class TranslatesBootstrapService implements OnApplicationBootstrap {
+export class TranslatesBootstrapService implements OnModuleInit {
   private readonly logger = new Logger(TranslatesBootstrapService.name);
 
   constructor(
@@ -20,11 +15,10 @@ export class TranslatesBootstrapService implements OnApplicationBootstrap {
     private readonly translatesStorage: TranslatesStorage
   ) {}
 
-  async onApplicationBootstrap() {
+  async onModuleInit() {
     this.translatesConfig
       .logger()
-      .log('onApplicationBootstrap', TranslatesBootstrapService.name);
-    this.logger.log('onApplicationBootstrap');
+      .log('onModuleInit', TranslatesBootstrapService.name);
     if (this.translatesConfig.translatesLoader) {
       const translates = await this.translatesConfig.translatesLoader();
       this.translatesStorage.add(translates);
