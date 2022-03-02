@@ -1,6 +1,6 @@
 {
   "name": "nestjs-translates-workspace",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "NestJS module for adding translations to the application, with a pipe for translating validation errors",
   "keywords": [
     "nestjs",
