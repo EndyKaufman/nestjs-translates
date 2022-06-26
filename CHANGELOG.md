@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.5](https://github.com/EndyKaufman/nestjs-translates/compare/v1.0.4...v1.0.5) (2022-06-26)
+
+### Bug Fixes
+
+- update peerDependencies ([91968f7](https://github.com/EndyKaufman/nestjs-translates/commit/91968f76df739d8df03768d43a381b71bfa47c70))
+
 ### [1.0.4](https://github.com/EndyKaufman/nestjs-translates/compare/v1.0.3...v1.0.4) (2022-06-26)
 
 ### Bug Fixes
