@@ -6,6 +6,7 @@
 NestJS module for adding translations to the application, with a pipe for translating validation errors
 
 # Installation
+
 ```bash
 npm i --save nestjs-translates class-validator-multi-lang class-transformer
 ```
@@ -72,6 +73,7 @@ Create dictionaries **../assets/i18n/ru.json**
   "word": "слово"
 }
 ```
+
 ![example](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/34p0rro77ci4yt8lg1ki.png)
 
 ## License
