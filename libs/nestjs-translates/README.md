@@ -3,7 +3,7 @@
 
 NestJS module for adding translations to the application, with a pipe for translating validation errors
 
-## Installation
+# Installation
 
 ```bash
 npm i --save nestjs-translates class-validator-multi-lang class-transformer
@@ -28,48 +28,68 @@ Update file in **app.module.ts**
 ```typescript
 import { HttpException, HttpStatus, Module } from '@nestjs/common';
 import { ValidationError } from 'class-validator-multi-lang';
-import {
-  getDefaultTranslatesModuleOptions,
-  TranslatesModule,
-} from 'nestjs-translates';
+import { TranslatesModule } from 'nestjs-translates';
 import { join } from 'path';
 import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    TranslatesModule.forRoot(
-      getDefaultTranslatesModuleOptions({
-        localePaths: [
-          join(__dirname, 'assets', 'i18n'),
-          join(__dirname, 'assets', 'i18n', 'class-validator-messages'),
-        ],
-        locales: ['en', 'ru'],
-        validationPipeOptions: {
-          transform: true,
-          validationError: {
-            target: false,
-            value: false,
-          },
-          transformOptions: {
-            strategy: 'excludeAll',
-          },
-          exceptionFactory: (errors: ValidationError[]) =>
-            new HttpException(errors, HttpStatus.BAD_REQUEST),
+    TranslatesModule.forRootDefault({
+      localePaths: [
+        join(__dirname, 'assets', 'i18n'),
+        join(__dirname, 'assets', 'i18n', 'class-validator-messages'),
+      ],
+      defaultLocale: 'en',
+      locales: ['en', 'ru'],
+      validationPipeOptions: {
+        transform: true,
+        validationError: {
+          target: false,
+          value: false,
         },
-      })
-    ),
+        transformOptions: {
+          strategy: 'excludeAll',
+        },
+        exceptionFactory: (errors: ValidationError[]) =>
+          new HttpException(errors, HttpStatus.BAD_REQUEST),
+      },
+      // disable multi language validation pipe
+      // usePipe: false
+    }),
   ],
   controllers: [AppController],
 })
 export class AppModule {}
 ```
 
-Create dictionaries **../assets/i18n/en.json**
+Create dictionaries **../assets/i18n/ru.json**
 
 ```json
 {
-  "word": "word"
+  "word": "слово"
 }
+```
+
+![example](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/34p0rro77ci4yt8lg1ki.png)
+
+## Use translates module with isolated storage for translations in only one feature module
+
+```typescript
+import { TranslatesModule } from 'nestjs-translates';
+import { join } from 'path';
+
+@Module({
+  imports: [
+    SubFeatureModule,
+    TranslatesModule.forFeature({
+      localePaths: [join(__dirname, 'assets', 'feature-i18n')],
+      defaultLocale: 'en',
+      locales: ['en', 'ru'],
+      usePipes: false,
+    }),
+  ],
+})
+export class FeatureModule {}
 ```
 
 ## License

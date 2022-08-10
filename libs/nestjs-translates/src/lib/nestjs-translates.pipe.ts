@@ -26,16 +26,16 @@ export class TranslatesPipe extends ValidationPipe {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public override async transform(value: any, metadata: ArgumentMetadata) {
-    let locale = 'en';
+    let locale = this.translatesConfig.defaultLocale;
     if (this.req) {
       locale = await this.translatesConfig.requestLocaleDetector(this.req);
     }
     (this.validatorOptions as ValidatorOptions).messages =
       this.translatesStorage.translates[locale] ||
-      this.translatesStorage.translates['en'];
+      this.translatesStorage.translates[this.translatesConfig.defaultLocale];
     (this.validatorOptions as ValidatorOptions).titles =
       this.translatesStorage.translates[locale] ||
-      this.translatesStorage.translates['en'];
+      this.translatesStorage.translates[this.translatesConfig.defaultLocale];
     return super.transform(value, metadata);
   }
 }
