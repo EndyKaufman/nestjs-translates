@@ -46,13 +46,14 @@ export function getDefaultTranslatesModuleOptions({
   locales,
   validationPipeOptions,
 }: DefaultTranslatesModuleOptions): TranslatesModuleOptions {
+  defaultLocale = defaultLocale || TRANSLATES_DEFAULT_LOCALE;
   return {
     usePipes: true,
     providers: [
       {
         provide: TRANSLATES_CONFIG,
         useValue: {
-          defaultLocale: defaultLocale || TRANSLATES_DEFAULT_LOCALE,
+          defaultLocale,
           validationPipeOptions,
           contextLocaleDetector: async (context: ExecutionContext) => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
