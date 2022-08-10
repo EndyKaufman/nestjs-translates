@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.0.5...v1.1.0) (2022-08-10)
+
+### Features
+
+- added static method forFeature for isolated use of translations, added static method forRootDefault with default methods ([ebf0480](https://github.com/EndyKaufman/nestjs-translates/commit/ebf0480b4422198d484f242a15bd66b5a1826ea7))
+
 ### [1.0.5](https://github.com/EndyKaufman/nestjs-translates/compare/v1.0.4...v1.0.5) (2022-06-26)
 
 ### Bug Fixes
