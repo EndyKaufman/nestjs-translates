@@ -4,13 +4,15 @@ import {
   TRANSLATES_CONFIG,
 } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
+import { TranslatesService } from './nestjs-translates.service';
 
 @Injectable()
 export class TranslatesBootstrapService implements OnModuleInit {
   constructor(
     @Inject(TRANSLATES_CONFIG)
     private readonly translatesConfig: TranslatesConfig,
-    private readonly translatesStorage: TranslatesStorage
+    private readonly translatesStorage: TranslatesStorage,
+    private readonly translatesService: TranslatesService
   ) {}
 
   async onModuleInit() {
@@ -18,6 +20,7 @@ export class TranslatesBootstrapService implements OnModuleInit {
       .logger()
       .log('onModuleInit', TranslatesBootstrapService.name);
 
+    this.translatesService.translatesConfig = this.translatesConfig;
     this.translatesStorage.defaultLocale = this.translatesConfig.defaultLocale;
 
     if (this.translatesConfig.translatesLoader) {

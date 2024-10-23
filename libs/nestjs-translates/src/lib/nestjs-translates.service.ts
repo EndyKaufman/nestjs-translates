@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { render } from 'mustache';
+import { TranslatesConfig } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
 
 @Injectable()
 export class TranslatesService {
+  translatesConfig?: TranslatesConfig;
+
   constructor(private readonly translatesStorage: TranslatesStorage) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
