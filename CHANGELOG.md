@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.1.0...v1.2.0) (2024-10-23)
+
+### Features
+
+- share translatesConfig value from TranslatesService ([ca830c6](https://github.com/EndyKaufman/nestjs-translates/commit/ca830c6f24257106ec4735808250050bbc945e3d))
+
 ## [1.1.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.0.5...v1.1.0) (2022-08-10)
 
 ### Features
