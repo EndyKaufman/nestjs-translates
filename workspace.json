@@ -1,7 +1,0 @@
-{
-  "version": 2,
-  "projects": {
-    "demo": "apps/demo",
-    "nestjs-translates": "libs/nestjs-translates"
-  }
-}

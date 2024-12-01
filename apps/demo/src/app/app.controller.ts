@@ -1,5 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { TranslatesService } from 'nestjs-translates';
+import {
+  InjectTranslateFunction,
+  TranslateFunction,
+  TranslatesService,
+} from 'nestjs-translates';
 import { SampleDto } from './sample.dto';
 
 @Controller()
@@ -14,6 +18,11 @@ export class AppController {
   @Get('russian-word')
   russianWord() {
     return this.translatesService.translate('word', 'ru');
+  }
+
+  @Get('translate-word')
+  translateWord(@InjectTranslateFunction() getText: TranslateFunction) {
+    return getText('word two');
   }
 
   @Post('validate-dto')

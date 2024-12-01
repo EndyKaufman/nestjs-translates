@@ -5,6 +5,7 @@ import {
 } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
 import { TranslatesService } from './nestjs-translates.service';
+import { getGlobal } from './utils/get-global.util';
 
 @Injectable()
 export class TranslatesBootstrapService implements OnModuleInit {
@@ -19,6 +20,9 @@ export class TranslatesBootstrapService implements OnModuleInit {
     this.translatesConfig
       .logger()
       .log('onModuleInit', TranslatesBootstrapService.name);
+
+    getGlobal().translatesConfig = this.translatesConfig;
+    getGlobal().translatesService = this.translatesService;
 
     this.translatesService.translatesConfig = this.translatesConfig;
     this.translatesStorage.defaultLocale = this.translatesConfig.defaultLocale;

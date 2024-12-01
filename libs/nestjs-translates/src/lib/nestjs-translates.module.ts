@@ -1,5 +1,5 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { APP_PIPE } from '@nestjs/core';
+import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { TranslatesBootstrapService } from './nestjs-translates-bootstrap.service';
 import {
   DefaultTranslatesModuleOptions,
@@ -11,6 +11,7 @@ import {
 import { TranslatesPipe } from './nestjs-translates.pipe';
 import { TranslatesService } from './nestjs-translates.service';
 import { TranslatesStorage } from './nestjs-translates.storage';
+import { TranslatesInterceptor } from './nestjs-translates.interceptor';
 
 @Module({
   providers: [TranslatesStorage, TranslatesService],
@@ -33,6 +34,9 @@ export class TranslatesModule {
         ...(options.usePipes
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
+        ...(options.useInterceptors
+          ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
+          : []),
       ],
       exports: [...(options.exports || []), TRANSLATES_CONFIG],
     };
@@ -41,9 +45,13 @@ export class TranslatesModule {
   static forRootDefault(
     options: DefaultTranslatesModuleOptions & UsePipesOptions
   ): DynamicModule {
-    const { providers, usePipes } = getDefaultTranslatesModuleOptions(options);
+    const { providers, usePipes, useInterceptors } =
+      getDefaultTranslatesModuleOptions(options);
     if (options.usePipes === undefined) {
       options.usePipes = usePipes;
+    }
+    if (options.useInterceptors === undefined) {
+      options.useInterceptors = useInterceptors;
     }
     return {
       module: TranslatesModule,
@@ -53,6 +61,9 @@ export class TranslatesModule {
         ...(options.usePipes
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
+        ...(options.useInterceptors
+          ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
+          : []),
       ],
       exports: [TRANSLATES_CONFIG],
     };
@@ -61,9 +72,13 @@ export class TranslatesModule {
   static forFeature(
     options: DefaultTranslatesModuleOptions & UsePipesOptions
   ): DynamicModule {
-    const { providers, usePipes } = getDefaultTranslatesModuleOptions(options);
+    const { providers, usePipes, useInterceptors } =
+      getDefaultTranslatesModuleOptions(options);
     if (options.usePipes === undefined) {
       options.usePipes = usePipes;
+    }
+    if (options.useInterceptors === undefined) {
+      options.useInterceptors = useInterceptors;
     }
     return {
       module: TranslatesModule,
@@ -74,6 +89,9 @@ export class TranslatesModule {
         TranslatesBootstrapService,
         ...(options.usePipes
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
+          : []),
+        ...(options.useInterceptors
+          ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
       ],
       exports: [TranslatesStorage, TranslatesService, TRANSLATES_CONFIG],

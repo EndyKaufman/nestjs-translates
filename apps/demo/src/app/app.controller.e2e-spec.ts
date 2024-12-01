@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, INestApplication } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { ValidationError } from 'class-validator-multi-lang';
 import {
+  ACCEPT_LANGUAGE,
   getDefaultTranslatesModuleOptions,
   TranslatesModule,
 } from 'nestjs-translates';
@@ -68,6 +69,22 @@ describe('AppController (e2e)', () => {
       .expect('слово');
   });
 
+  it('Use InjectTranslateFunction decorator', () => {
+    return request(app.getHttpServer())
+      .get('/translate-word')
+      .set({ [ACCEPT_LANGUAGE]: 'ru' })
+      .expect(200)
+      .expect('слово два');
+  });
+
+  it('Use InjectTranslateFunction decorator and check custom english translate', () => {
+    return request(app.getHttpServer())
+      .get('/translate-word')
+      .set({ [ACCEPT_LANGUAGE]: 'en-EN' })
+      .expect(200)
+      .expect('word two in english');
+  });
+
   it('Post empty data (default language: en)', () => {
     return request(app.getHttpServer())
       .post('/validate-dto')
@@ -111,7 +128,7 @@ describe('AppController (e2e)', () => {
   it('Post empty data (language: ru)', () => {
     return request(app.getHttpServer())
       .post('/validate-dto')
-      .set({ 'accept-language': 'ru' })
+      .set({ [ACCEPT_LANGUAGE]: 'ru' })
       .expect(400)
       .expect([
         {

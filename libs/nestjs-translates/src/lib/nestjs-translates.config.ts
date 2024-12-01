@@ -6,6 +6,9 @@ import {
 } from '@nestjs/common';
 import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
+import { contextLocaleDetector } from './utils/context-locale-detector';
+import { contextRequestDetector } from './utils/context-request-detector';
+import { requestLocaleDetector } from './utils/request-locale-detector';
 
 export const TRANSLATES_CONFIG = 'TRANSLATES_CONFIG';
 
@@ -13,15 +16,18 @@ export const TRANSLATES_DEFAULT_LOCALE = 'en';
 
 export interface UsePipesOptions {
   usePipes?: boolean;
+  useInterceptors?: boolean;
 }
 
 export type TranslatesModuleOptions = ModuleMetadata & UsePipesOptions;
 
 export interface TranslatesConfig {
   defaultLocale: string;
-  contextLocaleDetector: (context: ExecutionContext) => Promise<string>;
+
+  contextRequestDetector: (context: ExecutionContext) => Request;
+  contextLocaleDetector: (context: ExecutionContext) => string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  requestLocaleDetector: (request: any) => Promise<string>;
+  requestLocaleDetector: (request: any) => string;
   translatesLoader: () => Promise<{
     [locale: string]: {
       [key: string]: string;
@@ -47,41 +53,33 @@ export function getDefaultTranslatesModuleOptions({
   validationPipeOptions,
 }: DefaultTranslatesModuleOptions): TranslatesModuleOptions {
   defaultLocale = defaultLocale || TRANSLATES_DEFAULT_LOCALE;
+  if (defaultLocale === undefined) {
+    throw new Error('defaultLocale not set');
+  }
   return {
     usePipes: true,
+    useInterceptors: true,
     providers: [
       {
         provide: TRANSLATES_CONFIG,
         useValue: {
           defaultLocale,
           validationPipeOptions,
-          contextLocaleDetector: async (context: ExecutionContext) => {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            let req: any;
-            const contextType: string = context.getType();
-            switch (contextType) {
-              case 'http':
-                req = context.switchToHttp().getRequest();
-                break;
-              case 'graphql':
-                [, , req] = context.getArgs();
-                break;
+          contextRequestDetector: (context: ExecutionContext) => {
+            return contextRequestDetector(context);
+          },
+          contextLocaleDetector: (context: ExecutionContext) => {
+            if (defaultLocale === undefined) {
+              throw new Error('defaultLocale not set');
             }
-            req = req?.req || req; // todo: fix it
-            const locale = (req.raw?.headers ||
-              req.headers ||
-              req.req?.headers)?.['accept-language'];
-
-            return (locale || defaultLocale).split(',')[0];
+            return contextLocaleDetector(context, defaultLocale);
           },
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          requestLocaleDetector: async (req: any) => {
-            req = req?.req || req || {}; // todo: fix it
-            const locale = (req.raw?.headers ||
-              req.headers ||
-              req.req?.headers)?.['accept-language'];
-
-            return (locale || defaultLocale).split(',')[0];
+          requestLocaleDetector: (req: any) => {
+            if (defaultLocale === undefined) {
+              throw new Error('defaultLocale not set');
+            }
+            return requestLocaleDetector(req, defaultLocale);
           },
           translatesLoader: async () => {
             const translates: {
