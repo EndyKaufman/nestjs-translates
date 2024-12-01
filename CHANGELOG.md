@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.2.0...v1.3.0) (2024-12-01)
+
+### Features
+
+- add TranslatesInterceptor, add contextRequestDetector to options, add InjectTranslateFunction decorator ([9cf1c66](https://github.com/EndyKaufman/nestjs-translates/commit/9cf1c66d56e21dd1eb42cc130ae8764c189c3431))
+
 ## [1.2.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.1.0...v1.2.0) (2024-10-23)
 
 ### Features
