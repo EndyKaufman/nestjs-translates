@@ -3,6 +3,7 @@ import {
   ExecutionContext,
   Inject,
   Injectable,
+  Logger,
   NestInterceptor,
 } from '@nestjs/common';
 import { map } from 'rxjs/operators';
@@ -15,6 +16,8 @@ import { TranslatesService } from './nestjs-translates.service';
 
 @Injectable()
 export class TranslatesInterceptor implements NestInterceptor {
+  private logger = new Logger(TranslatesInterceptor.name);
+
   constructor(
     @Inject(TRANSLATES_CONFIG)
     private readonly translatesConfig: TranslatesConfig,
@@ -35,7 +38,7 @@ export class TranslatesInterceptor implements NestInterceptor {
       .pipe(map((result) => this.convertObject(result, locale)));
   }
 
-  async convertObject(
+  convertObject(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: Record<string, any> | Record<string, any>[],
     lang: string,
@@ -67,13 +70,14 @@ export class TranslatesInterceptor implements NestInterceptor {
             if (localKey in data && data[localKey]?.[lang]) {
               data[key] = data?.[localKey]?.[lang];
             } else {
-              data[key] = this.translatesService.translate(data[key], lang);
+              data[key] =
+                this.translatesService.translate(data[key], lang) || data[key];
             }
           }
         }
       }
     } catch (err) {
-      return data;
+      this.logger.error(err, err.stack);
     }
     return data;
   }
