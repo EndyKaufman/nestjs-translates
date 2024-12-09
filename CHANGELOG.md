@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/EndyKaufman/nestjs-translates/compare/v1.3.1...v1.3.2) (2024-12-09)
+
+### Bug Fixes
+
+- add support work with WS in contextRequestDetector ([4953c95](https://github.com/EndyKaufman/nestjs-translates/commit/4953c95f1f9f0e3a30e835e4cedb7041594d95a9))
+
 ### [1.3.1](https://github.com/EndyKaufman/nestjs-translates/compare/v1.3.0...v1.3.1) (2024-12-03)
 
 ### Bug Fixes
