@@ -53,6 +53,9 @@ export function contextRequestDetector(ctx: ExecutionContext) {
       case 'graphql':
         [, , req] = ctx.getArgs();
         break;
+      case 'ws':
+        req = ctx.switchToWs().getClient();
+        break;
       default:
         req = ctx;
         break;
