@@ -29,7 +29,8 @@ export const CurrentTranslatesRequest = createParamDecorator(
   }
 );
 
-export type TranslateFunction = (string: string) => string;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TranslateFunction = (string: string, context?: any) => string;
 
 export const InjectTranslateFunction = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
@@ -37,7 +38,8 @@ export const InjectTranslateFunction = createParamDecorator(
       translatesConfig: TranslatesConfig;
     }>().translatesConfig.contextRequestDetector(ctx);
     if (req.headers[X_SKIP_TRANSLATE]) {
-      return (word: string) => word;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+      return (word: string, context: any = {}) => word;
     }
     const locale =
       getGlobal<{
@@ -46,9 +48,10 @@ export const InjectTranslateFunction = createParamDecorator(
       getGlobal<{ translatesConfig: TranslatesConfig }>().translatesConfig
         .defaultLocale;
 
-    return (word: string) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (word: string, context: any = {}) =>
       getGlobal<{
         translatesService: TranslatesService;
-      }>().translatesService.translate(word, locale);
+      }>().translatesService.translate(word, locale, context);
   }
 );
