@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.3.3...v2.0.0) (2024-12-20)
+
+### ⚠ BREAKING CHANGES
+
+- now for detect user lang in pipe we mutate body of request, for custom logic to update body you can set options for it: addContextToBody, getContextFromBody, getOriginalBodyFromBody
+
+### Features
+
+- remove Scope.REQUEST from TranslatesPipe ([f1481de](https://github.com/EndyKaufman/nestjs-translates/commit/f1481de1f75a6b743355f33ab44243005c06257a))
+
 ### [1.3.3](https://github.com/EndyKaufman/nestjs-translates/compare/v1.3.2...v1.3.3) (2024-12-15)
 
 ### Bug Fixes
