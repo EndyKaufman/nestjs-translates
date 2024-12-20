@@ -47,7 +47,6 @@ export class SubFeatureModule {}
       localePaths: [join(__dirname, 'assets', 'feature-i18n')],
       defaultLocale: 'en',
       locales: ['en', 'ru'],
-      usePipes: false,
     }),
   ],
   providers: [

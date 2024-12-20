@@ -8,6 +8,11 @@ import { existsSync, readFileSync } from 'fs';
 import { resolve } from 'path';
 import { contextLocaleDetector } from './utils/context-locale-detector';
 import { contextRequestDetector } from './utils/context-request-detector';
+import {
+  addContextToBody,
+  getContextFromBody,
+  getOriginalBodyFromBody,
+} from './utils/context-with-body';
 import { requestLocaleDetector } from './utils/request-locale-detector';
 
 export const TRANSLATES_CONFIG = 'TRANSLATES_CONFIG';
@@ -35,6 +40,13 @@ export interface TranslatesConfig {
   }>;
   logger: () => Logger;
   validationPipeOptions?: ValidationPipeOptions;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  addContextToBody?: (context: ExecutionContext) => any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getContextFromBody?: (body: any) => ExecutionContext;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getOriginalBodyFromBody?: (body: any) => any;
 }
 
 export interface DefaultTranslatesModuleOptions {
@@ -65,6 +77,17 @@ export function getDefaultTranslatesModuleOptions({
         useValue: {
           defaultLocale,
           validationPipeOptions,
+          addContextToBody: (context: ExecutionContext) => {
+            return addContextToBody(context);
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          getContextFromBody: (body: any) => {
+            return getContextFromBody(body);
+          },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          getOriginalBodyFromBody: (body: any) => {
+            return getOriginalBodyFromBody(body);
+          },
           contextRequestDetector: (context: ExecutionContext) => {
             return contextRequestDetector(context);
           },

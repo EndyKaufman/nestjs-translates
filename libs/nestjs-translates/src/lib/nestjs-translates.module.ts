@@ -12,6 +12,7 @@ import { TranslatesPipe } from './nestjs-translates.pipe';
 import { TranslatesService } from './nestjs-translates.service';
 import { TranslatesStorage } from './nestjs-translates.storage';
 import { TranslatesInterceptor } from './nestjs-translates.interceptor';
+import { AsyncLocalStorage } from 'node:async_hooks';
 
 @Module({
   providers: [TranslatesStorage, TranslatesService],
@@ -31,14 +32,22 @@ export class TranslatesModule {
       providers: [
         ...(options.providers || []),
         TranslatesBootstrapService,
-        ...(options.usePipes
-          ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
-          : []),
+        {
+          provide: AsyncLocalStorage,
+          useValue: new AsyncLocalStorage(),
+        },
         ...(options.useInterceptors
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
+        ...(options.usePipes
+          ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
+          : []),
       ],
-      exports: [...(options.exports || []), TRANSLATES_CONFIG],
+      exports: [
+        ...(options.exports || []),
+        TRANSLATES_CONFIG,
+        AsyncLocalStorage,
+      ],
     };
   }
 
@@ -58,27 +67,30 @@ export class TranslatesModule {
       providers: [
         ...(providers || []),
         TranslatesBootstrapService,
-        ...(options.usePipes
-          ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
-          : []),
+        {
+          provide: AsyncLocalStorage,
+          useValue: new AsyncLocalStorage(),
+        },
         ...(options.useInterceptors
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
+        ...(options.usePipes
+          ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
+          : []),
       ],
-      exports: [TRANSLATES_CONFIG],
+      exports: [TRANSLATES_CONFIG, AsyncLocalStorage],
     };
   }
 
   static forFeature(
     options: DefaultTranslatesModuleOptions & UsePipesOptions
   ): DynamicModule {
-    const { providers, usePipes, useInterceptors } =
-      getDefaultTranslatesModuleOptions(options);
+    const { providers } = getDefaultTranslatesModuleOptions(options);
     if (options.usePipes === undefined) {
-      options.usePipes = usePipes;
+      options.usePipes = false;
     }
     if (options.useInterceptors === undefined) {
-      options.useInterceptors = useInterceptors;
+      options.useInterceptors = false;
     }
     return {
       module: TranslatesModule,
@@ -87,6 +99,10 @@ export class TranslatesModule {
         TranslatesService,
         ...(providers || []),
         TranslatesBootstrapService,
+        {
+          provide: AsyncLocalStorage,
+          useValue: new AsyncLocalStorage(),
+        },
         ...(options.usePipes
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
@@ -94,7 +110,12 @@ export class TranslatesModule {
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
       ],
-      exports: [TranslatesStorage, TranslatesService, TRANSLATES_CONFIG],
+      exports: [
+        TranslatesStorage,
+        TranslatesService,
+        TRANSLATES_CONFIG,
+        AsyncLocalStorage,
+      ],
     };
   }
 }

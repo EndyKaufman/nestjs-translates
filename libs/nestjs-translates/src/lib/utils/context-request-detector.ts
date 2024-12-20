@@ -70,8 +70,7 @@ export function contextRequestDetector(ctx: ExecutionContext) {
     req?.connection?.parser?.incoming ||
     req?.req?.extra?.request ||
     req?.req ||
-    req ||
-    req.raw?.headers;
+    req;
   if (result.headers) {
     result.headers = prepareHeaders(result.headers);
   }

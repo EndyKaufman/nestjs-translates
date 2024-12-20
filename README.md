@@ -87,7 +87,6 @@ import { join } from 'path';
       localePaths: [join(__dirname, 'assets', 'feature-i18n')],
       defaultLocale: 'en',
       locales: ['en', 'ru'],
-      usePipes: false,
     }),
   ],
 })
