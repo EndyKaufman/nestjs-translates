@@ -40,13 +40,17 @@ export class TranslatesPipe extends ValidationPipe {
         (this.translatesConfig.getContextFromBody &&
           this.translatesConfig.getContextFromBody(value)) ||
         null;
-      if (this.translatesConfig.getOriginalBodyFromBody) {
-        value = this.translatesConfig.getOriginalBodyFromBody(value);
+      if (context) {
+        if (this.translatesConfig.getOriginalBodyFromBody) {
+          value = this.translatesConfig.getOriginalBodyFromBody(value);
+        }
+        const req = context
+          ? this.translatesConfig.contextRequestDetector(context)
+          : null;
+        reqLocale = req
+          ? this.translatesConfig.requestLocaleDetector(req)
+          : null;
       }
-      const req = context
-        ? this.translatesConfig.contextRequestDetector(context)
-        : null;
-      reqLocale = req ? this.translatesConfig.requestLocaleDetector(req) : null;
     } catch (err) {
       console.error(err, err.stack);
       // ignore all errors
