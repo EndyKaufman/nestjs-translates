@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/EndyKaufman/nestjs-translates/compare/v2.0.0...v2.0.1) (2024-12-20)
+
+### Bug Fixes
+
+- update getOriginalBodyFromBody ([8dee817](https://github.com/EndyKaufman/nestjs-translates/commit/8dee8177ad69b7c92e81307e7d8733a68b5b41d0))
+- update shared index file ([81d5398](https://github.com/EndyKaufman/nestjs-translates/commit/81d5398be6e1a575c2377e38482417f5304abc1c))
+
 ## [2.0.0](https://github.com/EndyKaufman/nestjs-translates/compare/v1.3.3...v2.0.0) (2024-12-20)
 
 ### ⚠ BREAKING CHANGES
