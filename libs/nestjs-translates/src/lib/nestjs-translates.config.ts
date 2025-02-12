@@ -49,13 +49,13 @@ export interface TranslatesConfig {
   getOriginalBodyFromBody?: (body: any) => any;
 }
 
-export interface DefaultTranslatesModuleOptions {
+export type DefaultTranslatesModuleOptions = {
   defaultLocale?: string;
   localePaths: string[];
   vendorLocalePaths?: string[];
   locales: string[];
   validationPipeOptions?: ValidationPipeOptions;
-}
+} & Partial<TranslatesConfig>;
 
 export function getDefaultTranslatesModuleOptions({
   defaultLocale,
@@ -63,6 +63,7 @@ export function getDefaultTranslatesModuleOptions({
   vendorLocalePaths,
   locales,
   validationPipeOptions,
+  ...other
 }: DefaultTranslatesModuleOptions): TranslatesModuleOptions {
   defaultLocale = defaultLocale || TRANSLATES_DEFAULT_LOCALE;
   if (defaultLocale === undefined) {
@@ -142,6 +143,7 @@ export function getDefaultTranslatesModuleOptions({
             return translates;
           },
           logger: () => new Logger(),
+          ...other,
         },
       },
     ],
