@@ -4,6 +4,7 @@ import { TranslatesModule } from 'nestjs-translates';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { FeatureModule } from './feature.module';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { FeatureModule } from './feature.module';
       },
     }),
   ],
+  providers: [AppService],
   controllers: [AppController],
 })
 export class AppModule {}

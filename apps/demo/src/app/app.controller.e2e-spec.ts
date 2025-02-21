@@ -9,6 +9,7 @@ import {
 import { join } from 'path';
 import request from 'supertest';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 describe('AppController (e2e)', () => {
   jest.setTimeout(3 * 60 * 1000);
@@ -49,6 +50,7 @@ describe('AppController (e2e)', () => {
           })
         ),
       ],
+      providers: [AppService],
       controllers: [AppController],
     }).compile();
     app = moduleRef.createNestApplication();
@@ -80,6 +82,21 @@ describe('AppController (e2e)', () => {
   it('Use InjectTranslateFunction decorator and check custom english translate', () => {
     return request(app.getHttpServer())
       .get('/translate-word')
+      .set({ [ACCEPT_LANGUAGE]: 'en-EN' })
+      .expect(200)
+      .expect('word two in english');
+  });
+  it('Use AsyncLocalStorage', () => {
+    return request(app.getHttpServer())
+      .get('/translate-service-word')
+      .set({ [ACCEPT_LANGUAGE]: 'ru' })
+      .expect(200)
+      .expect('слово два');
+  });
+
+  it('Use AsyncLocalStorage and check custom english translate', () => {
+    return request(app.getHttpServer())
+      .get('/translate-service-word')
       .set({ [ACCEPT_LANGUAGE]: 'en-EN' })
       .expect(200)
       .expect('word two in english');

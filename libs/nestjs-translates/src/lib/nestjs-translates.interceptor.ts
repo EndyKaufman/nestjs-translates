@@ -35,21 +35,39 @@ export class TranslatesInterceptor implements NestInterceptor {
       return next.handle();
     }
 
-    try {
-      if (this.translatesConfig.addContextToBody) {
-        this.translatesConfig.addContextToBody(context);
-      }
-    } catch (err) {
-      console.error(err, err.stack);
-      // ignore all errors
-    }
+    const store = {
+      nestjsTranslatesLocale: locale,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      translate: (key: string, context?: any) =>
+        this.translatesService.translate(key, locale, context || {}),
+      translateObject: (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: Record<string, any> | Record<string, any>[],
+        depth: number
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ) => this.translatesService.translateObject(data, locale, depth || 10),
+    };
+
+    const wrapObservableForWorkWithAsyncLocalStorage = (
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      observable: Observable<any>
+    ) =>
+      new Observable((observer) => {
+        this.asyncLocalStorage.run(store, () => {
+          observable.subscribe({
+            next: (res) => observer.next(res),
+            error: (error) => observer.error(error),
+            complete: () => observer.complete(),
+          });
+        });
+      });
 
     const run = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result: any = next.handle();
 
       if (isObservable(result)) {
-        return result.pipe(
+        return wrapObservableForWorkWithAsyncLocalStorage(result).pipe(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           concatMap(async (data: any) => {
             return this.translatesService.translateObject(data, locale);
@@ -59,7 +77,7 @@ export class TranslatesInterceptor implements NestInterceptor {
       if (result instanceof Promise && typeof result?.then === 'function') {
         return result.then(async (data) => {
           if (isObservable(data)) {
-            return data.pipe(
+            return wrapObservableForWorkWithAsyncLocalStorage(data).pipe(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               concatMap(async (data: any) => {
                 return this.translatesService.translateObject(data, locale);
@@ -83,11 +101,6 @@ export class TranslatesInterceptor implements NestInterceptor {
       ) as Observable<any>;
     };
 
-    return this.asyncLocalStorage.run(
-      { nestjsTranslatesLocale: locale },
-      () => {
-        return run();
-      }
-    );
+    return run();
   }
 }

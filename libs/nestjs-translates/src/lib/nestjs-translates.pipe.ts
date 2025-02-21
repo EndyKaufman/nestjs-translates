@@ -1,6 +1,6 @@
-import { Inject, ValidationPipe } from '@nestjs/common';
+import { Inject, ValidationError, ValidationPipe } from '@nestjs/common';
 import { Injectable } from '@nestjs/common/decorators/core/injectable.decorator';
-import { ArgumentMetadata } from '@nestjs/common/interfaces/features/pipe-transform.interface';
+import { ValidatorPackage } from '@nestjs/common/interfaces/external/validator-package.interface';
 import { ValidatorOptions } from 'class-validator-multi-lang';
 import { AsyncLocalStorage } from 'node:async_hooks';
 import {
@@ -9,6 +9,9 @@ import {
 } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
 import { NestjsTranslatesAsyncLocalStorageData } from './types/nestjs-translates-async-local-storage-data';
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+let classValidator: ValidatorPackage = {} as any;
 
 @Injectable()
 export class TranslatesPipe extends ValidationPipe {
@@ -22,51 +25,38 @@ export class TranslatesPipe extends ValidationPipe {
       validatorPackage: require('class-validator-multi-lang'),
       ...(translatesConfig.validationPipeOptions || {}),
     });
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    classValidator = this.loadValidator(require('class-validator-multi-lang'));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public override async transform(value: any, metadata: ArgumentMetadata) {
+  protected override validate(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    object: any,
+    validatorOptions?: ValidatorOptions
+  ): Promise<ValidationError[]> | ValidationError[] {
     if (
-      typeof value === 'string' ||
-      typeof value === 'number' ||
-      typeof value === 'function'
+      typeof object === 'string' ||
+      typeof object === 'number' ||
+      typeof object === 'function'
     ) {
-      return value;
-    }
-    let reqLocale: string | null = null;
-
-    try {
-      const context =
-        (this.translatesConfig.getContextFromBody &&
-          this.translatesConfig.getContextFromBody(value)) ||
-        null;
-      if (context) {
-        if (this.translatesConfig.getOriginalBodyFromBody) {
-          value = this.translatesConfig.getOriginalBodyFromBody(value);
-        }
-        const req = context
-          ? this.translatesConfig.contextRequestDetector(context)
-          : null;
-        reqLocale = req
-          ? this.translatesConfig.requestLocaleDetector(req)
-          : null;
-      }
-    } catch (err) {
-      console.error(err, err.stack);
-      // ignore all errors
+      return object;
     }
 
     const locale =
-      reqLocale ||
       this.asyncLocalStorage.getStore()?.nestjsTranslatesLocale ||
       this.translatesConfig.defaultLocale;
 
-    (this.validatorOptions as ValidatorOptions).messages =
+    if (!validatorOptions) {
+      validatorOptions = {};
+    }
+
+    validatorOptions.messages =
       this.translatesStorage.translates[locale] ||
       this.translatesStorage.translates[this.translatesConfig.defaultLocale];
-    (this.validatorOptions as ValidatorOptions).titles =
+    validatorOptions.titles =
       this.translatesStorage.translates[locale] ||
       this.translatesStorage.translates[this.translatesConfig.defaultLocale];
-    return super.transform(value, metadata);
+
+    return classValidator.validate(object, validatorOptions);
   }
 }

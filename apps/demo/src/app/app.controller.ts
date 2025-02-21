@@ -5,10 +5,14 @@ import {
   TranslatesService,
 } from 'nestjs-translates';
 import { SampleDto } from './sample.dto';
+import { AppService } from './app.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly translatesService: TranslatesService) {}
+  constructor(
+    private readonly translatesService: TranslatesService,
+    private readonly appService: AppService
+  ) {}
 
   @Get('english-word')
   englishWord() {
@@ -28,5 +32,10 @@ export class AppController {
   @Post('validate-dto')
   validateDto(@Body() sampleDto: SampleDto) {
     return sampleDto;
+  }
+
+  @Get('translate-service-word')
+  async translateServiceWord() {
+    return this.appService.getServiceWord();
   }
 }

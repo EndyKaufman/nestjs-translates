@@ -10,7 +10,6 @@ export * from './lib/nestjs-translates.storage';
 export * from './lib/types/nestjs-translates-async-local-storage-data';
 export * from './lib/utils/context-locale-detector';
 export * from './lib/utils/context-request-detector';
-export * from './lib/utils/context-with-body';
 export * from './lib/utils/get-first-dashed-words';
 export * from './lib/utils/get-global.util';
 export * from './lib/utils/get-text';
