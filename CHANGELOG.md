@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.1](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.0...v2.1.1) (2025-02-21)
+
+### Bug Fixes
+
+- append wrap to asynclocalstorage method next.handle() ([66c19ad](https://github.com/EndyKaufman/nestjs-translates/commit/66c19ada708066a3b6b12ba7ca2e66a46a48c326))
+
 ## [2.1.0](https://github.com/EndyKaufman/nestjs-translates/compare/v2.0.2...v2.1.0) (2025-02-21)
 
 ### Features
