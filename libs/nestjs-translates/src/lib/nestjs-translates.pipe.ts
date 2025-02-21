@@ -22,11 +22,16 @@ export class TranslatesPipe extends ValidationPipe {
     private readonly asyncLocalStorage: AsyncLocalStorage<NestjsTranslatesAsyncLocalStorageData>
   ) {
     super({
-      validatorPackage: require('class-validator-multi-lang'),
+      validatorPackage:
+        translatesConfig?.validationPipeOptions?.validatorPackage ||
+        require('class-validator-multi-lang'),
       ...(translatesConfig.validationPipeOptions || {}),
     });
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    classValidator = this.loadValidator(require('class-validator-multi-lang'));
+    classValidator = this.loadValidator(
+      translatesConfig?.validationPipeOptions?.validatorPackage ||
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        require('class-validator-multi-lang')
+    );
   }
 
   protected override validate(

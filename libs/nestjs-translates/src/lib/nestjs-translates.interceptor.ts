@@ -64,7 +64,9 @@ export class TranslatesInterceptor implements NestInterceptor {
 
     const run = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result: any = next.handle();
+      const result: any = this.asyncLocalStorage.run(store, () =>
+        next.handle()
+      );
 
       if (isObservable(result)) {
         return wrapObservableForWorkWithAsyncLocalStorage(result).pipe(
