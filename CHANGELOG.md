@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/EndyKaufman/nestjs-translates/compare/v2.0.2...v2.1.0) (2025-02-21)
+
+### Features
+
+- removed dirty mutation of input data for locale transfer, fixed work with locale transfer via AsyncLocalStorage ([b2820d7](https://github.com/EndyKaufman/nestjs-translates/commit/b2820d7b9822a0a41b2b89b7f5ee27bcedd2c32f))
+
 ### [2.0.2](https://github.com/EndyKaufman/nestjs-translates/compare/v2.0.1...v2.0.2) (2025-02-12)
 
 ### Bug Fixes
