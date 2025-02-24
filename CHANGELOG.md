@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.2](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.1...v2.1.2) (2025-02-24)
+
+### Bug Fixes
+
+- add TranslatesAsyncLocalStorageContext for sharing it data to parent modules ([57c63f2](https://github.com/EndyKaufman/nestjs-translates/commit/57c63f2e3a7ff0dbedf1fa0236779d237484bbc0))
+
 ### [2.1.1](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.0...v2.1.1) (2025-02-21)
 
 ### Bug Fixes
