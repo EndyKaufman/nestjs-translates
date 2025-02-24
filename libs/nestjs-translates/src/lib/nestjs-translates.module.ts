@@ -4,19 +4,26 @@ import { TranslatesBootstrapService } from './nestjs-translates-bootstrap.servic
 import {
   DefaultTranslatesModuleOptions,
   getDefaultTranslatesModuleOptions,
-  TranslatesModuleOptions,
   TRANSLATES_CONFIG,
+  TranslatesModuleOptions,
   UsePipesOptions,
 } from './nestjs-translates.config';
+import { TranslatesInterceptor } from './nestjs-translates.interceptor';
 import { TranslatesPipe } from './nestjs-translates.pipe';
 import { TranslatesService } from './nestjs-translates.service';
 import { TranslatesStorage } from './nestjs-translates.storage';
-import { TranslatesInterceptor } from './nestjs-translates.interceptor';
-import { AsyncLocalStorage } from 'node:async_hooks';
-
+import { TranslatesAsyncLocalStorageContext } from './types/nestjs-translates-async-local-storage-data';
 @Module({
-  providers: [TranslatesStorage, TranslatesService],
-  exports: [TranslatesStorage, TranslatesService],
+  providers: [
+    TranslatesStorage,
+    TranslatesService,
+    TranslatesAsyncLocalStorageContext,
+  ],
+  exports: [
+    TranslatesStorage,
+    TranslatesService,
+    TranslatesAsyncLocalStorageContext,
+  ],
 })
 class TranslatesModuleCore {}
 
@@ -32,10 +39,6 @@ export class TranslatesModule {
       providers: [
         ...(options.providers || []),
         TranslatesBootstrapService,
-        {
-          provide: AsyncLocalStorage,
-          useValue: new AsyncLocalStorage(),
-        },
         ...(options.useInterceptors
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
@@ -43,11 +46,7 @@ export class TranslatesModule {
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
       ],
-      exports: [
-        ...(options.exports || []),
-        TRANSLATES_CONFIG,
-        AsyncLocalStorage,
-      ],
+      exports: [...(options.exports || []), TRANSLATES_CONFIG],
     };
   }
 
@@ -67,10 +66,6 @@ export class TranslatesModule {
       providers: [
         ...(providers || []),
         TranslatesBootstrapService,
-        {
-          provide: AsyncLocalStorage,
-          useValue: new AsyncLocalStorage(),
-        },
         ...(options.useInterceptors
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
@@ -78,7 +73,7 @@ export class TranslatesModule {
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
       ],
-      exports: [TRANSLATES_CONFIG, AsyncLocalStorage],
+      exports: [TRANSLATES_CONFIG],
     };
   }
 
@@ -99,10 +94,6 @@ export class TranslatesModule {
         TranslatesService,
         ...(providers || []),
         TranslatesBootstrapService,
-        {
-          provide: AsyncLocalStorage,
-          useValue: new AsyncLocalStorage(),
-        },
         ...(options.usePipes
           ? [{ provide: APP_PIPE, useClass: TranslatesPipe }]
           : []),
@@ -110,12 +101,7 @@ export class TranslatesModule {
           ? [{ provide: APP_INTERCEPTOR, useClass: TranslatesInterceptor }]
           : []),
       ],
-      exports: [
-        TranslatesStorage,
-        TranslatesService,
-        TRANSLATES_CONFIG,
-        AsyncLocalStorage,
-      ],
+      exports: [TranslatesStorage, TranslatesService, TRANSLATES_CONFIG],
     };
   }
 }

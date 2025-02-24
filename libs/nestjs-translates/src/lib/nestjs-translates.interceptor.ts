@@ -5,7 +5,6 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { AsyncLocalStorage } from 'node:async_hooks';
 import { isObservable, Observable } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
 import {
@@ -14,7 +13,7 @@ import {
 } from './nestjs-translates.config';
 import { X_SKIP_TRANSLATE } from './nestjs-translates.constants';
 import { TranslatesService } from './nestjs-translates.service';
-import { NestjsTranslatesAsyncLocalStorageData } from './types/nestjs-translates-async-local-storage-data';
+import { TranslatesAsyncLocalStorageContext } from './types/nestjs-translates-async-local-storage-data';
 
 @Injectable()
 export class TranslatesInterceptor implements NestInterceptor {
@@ -22,7 +21,7 @@ export class TranslatesInterceptor implements NestInterceptor {
     @Inject(TRANSLATES_CONFIG)
     private readonly translatesConfig: TranslatesConfig,
     private readonly translatesService: TranslatesService,
-    private readonly asyncLocalStorage: AsyncLocalStorage<NestjsTranslatesAsyncLocalStorageData>
+    private readonly translatesAsyncLocalStorageContext: TranslatesAsyncLocalStorageContext
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
@@ -36,7 +35,8 @@ export class TranslatesInterceptor implements NestInterceptor {
     }
 
     const store = {
-      nestjsTranslatesLocale: locale,
+      config: this.translatesConfig,
+      locale,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       translate: (key: string, context?: any) =>
         this.translatesService.translate(key, locale, context || {}),
@@ -53,7 +53,7 @@ export class TranslatesInterceptor implements NestInterceptor {
       observable: Observable<any>
     ) =>
       new Observable((observer) => {
-        this.asyncLocalStorage.run(store, () => {
+        this.translatesAsyncLocalStorageContext.runWith(store, () => {
           observable.subscribe({
             next: (res) => observer.next(res),
             error: (error) => observer.error(error),
@@ -64,8 +64,9 @@ export class TranslatesInterceptor implements NestInterceptor {
 
     const run = () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const result: any = this.asyncLocalStorage.run(store, () =>
-        next.handle()
+      const result: any = this.translatesAsyncLocalStorageContext.runWith(
+        store,
+        () => next.handle()
       );
 
       if (isObservable(result)) {

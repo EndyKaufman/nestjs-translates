@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { NestjsTranslatesAsyncLocalStorageData } from 'nestjs-translates';
-import { AsyncLocalStorage } from 'node:async_hooks';
+import { TranslatesAsyncLocalStorageContext } from 'nestjs-translates';
 
 @Injectable()
 export class AppService {
   constructor(
-    private readonly asyncLocalStorage: AsyncLocalStorage<NestjsTranslatesAsyncLocalStorageData>
+    private readonly asyncLocalStorage: TranslatesAsyncLocalStorageContext
   ) {}
 
   getServiceWord() {
-    return this.asyncLocalStorage.getStore()?.translate('word two');
+    return this.asyncLocalStorage.get().translate('word two');
   }
 }
