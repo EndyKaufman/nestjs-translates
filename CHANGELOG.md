@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.0...v2.2.1) (2025-03-19)
+
+### Bug Fixes
+
+- skip empty value from translate ([35f4238](https://github.com/EndyKaufman/nestjs-translates/commit/35f423849ddc9e7ee42362e57d6fe291a0a4d916))
+
 ## [2.2.0](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.3...v2.2.0) (2025-03-19)
 
 ### Features
