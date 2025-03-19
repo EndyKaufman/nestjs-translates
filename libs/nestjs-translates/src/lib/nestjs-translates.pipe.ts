@@ -47,7 +47,7 @@ export class TranslatesPipe extends ValidationPipe {
     }
 
     const locale =
-      this.translatesAsyncLocalStorageContext.get().locale ||
+      this.translatesAsyncLocalStorageContext.get()?.locale ||
       this.translatesConfig.defaultLocale;
 
     if (!validatorOptions) {

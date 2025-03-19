@@ -14,6 +14,8 @@ import {
 import { X_SKIP_TRANSLATE } from './nestjs-translates.constants';
 import { TranslatesService } from './nestjs-translates.service';
 import { TranslatesAsyncLocalStorageContext } from './types/nestjs-translates-async-local-storage-data';
+import { Reflector } from '@nestjs/core';
+import { SKIP_TRANSLATE } from './nestjs-translates.decorators';
 
 @Injectable()
 export class TranslatesInterceptor implements NestInterceptor {
@@ -21,31 +23,43 @@ export class TranslatesInterceptor implements NestInterceptor {
     @Inject(TRANSLATES_CONFIG)
     private readonly translatesConfig: TranslatesConfig,
     private readonly translatesService: TranslatesService,
-    private readonly translatesAsyncLocalStorageContext: TranslatesAsyncLocalStorageContext
+    private readonly translatesAsyncLocalStorageContext: TranslatesAsyncLocalStorageContext,
+    private readonly reflector: Reflector
   ) {}
 
   intercept(context: ExecutionContext, next: CallHandler) {
     const req = this.translatesConfig.contextRequestDetector(context);
+    const skipTranslateMetadata =
+      (typeof context.getHandler === 'function' &&
+        this.reflector.get(SKIP_TRANSLATE, context.getHandler())) ||
+      (typeof context.getClass === 'function' &&
+        this.reflector.get(SKIP_TRANSLATE, context.getClass())) ||
+      undefined;
+
     const locale =
       this.translatesConfig.requestLocaleDetector(req) ||
       this.translatesConfig.defaultLocale;
-
-    if (req.headers[X_SKIP_TRANSLATE]) {
-      return next.handle();
-    }
-
+    const skipTranslate = this.translatesConfig.skipTranslateDetector
+      ? this.translatesConfig.skipTranslateDetector(context)
+      : skipTranslateMetadata || req.headers[X_SKIP_TRANSLATE];
     const store = {
+      skipTranslate,
       config: this.translatesConfig,
       locale,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       translate: (key: string, context?: any) =>
-        this.translatesService.translate(key, locale, context || {}),
+        skipTranslate
+          ? key
+          : this.translatesService.translate(key, locale, context || {}),
       translateObject: (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         data: Record<string, any> | Record<string, any>[],
         depth: number
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ) => this.translatesService.translateObject(data, locale, depth || 10),
+      ) =>
+        skipTranslate
+          ? data
+          : this.translatesService.translateObject(data, locale, depth || 10),
     };
 
     const wrapObservableForWorkWithAsyncLocalStorage = (
@@ -73,7 +87,9 @@ export class TranslatesInterceptor implements NestInterceptor {
         return wrapObservableForWorkWithAsyncLocalStorage(result).pipe(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           concatMap(async (data: any) => {
-            return this.translatesService.translateObject(data, locale);
+            return skipTranslate
+              ? data
+              : this.translatesService.translateObject(data, locale);
           })
         );
       }
@@ -83,25 +99,31 @@ export class TranslatesInterceptor implements NestInterceptor {
             return wrapObservableForWorkWithAsyncLocalStorage(data).pipe(
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               concatMap(async (data: any) => {
-                return this.translatesService.translateObject(data, locale);
+                return skipTranslate
+                  ? data
+                  : this.translatesService.translateObject(data, locale);
               })
             );
           } else {
-            return this.translatesService.translateObject(
-              data,
-              locale
-              // need for correct map types with base method of NestInterceptor
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            ) as Observable<any>;
+            return skipTranslate
+              ? data
+              : (this.translatesService.translateObject(
+                  data,
+                  locale
+                  // need for correct map types with base method of NestInterceptor
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ) as Observable<any>);
           }
         });
       }
-      return this.translatesService.translateObject(
-        result,
-        locale
-        // need for correct map types with base method of NestInterceptor
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ) as Observable<any>;
+      return skipTranslate
+        ? result
+        : (this.translatesService.translateObject(
+            result,
+            locale
+            // need for correct map types with base method of NestInterceptor
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          ) as Observable<any>);
     };
 
     return run();

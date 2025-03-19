@@ -3,6 +3,7 @@ import { AsyncLocalStorage } from 'async_hooks';
 import { TranslatesConfig } from '../nestjs-translates.config';
 
 export type TranslatesAsyncLocalStorageData = {
+  skipTranslate?: boolean;
   config: TranslatesConfig;
   locale?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,9 +1,16 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  SetMetadata,
+} from '@nestjs/common';
 import { TranslatesConfig } from './nestjs-translates.config';
 import { X_SKIP_TRANSLATE } from './nestjs-translates.constants';
 import { TranslatesService } from './nestjs-translates.service';
 import { getFirstDashedWords } from './utils/get-first-dashed-words';
 import { getGlobal } from './utils/get-global.util';
+
+export const SKIP_TRANSLATE = 'SKIP_TRANSLATE';
+export const SkipTranslate = () => SetMetadata(SKIP_TRANSLATE, true);
 
 export const CurrentLocale = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {

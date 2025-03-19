@@ -25,6 +25,7 @@ export interface TranslatesConfig {
   defaultLocale: string;
   trimLocaleOptions?: boolean;
   localeOptionsKeyResolver?: (key?: string) => string[] | string;
+  skipTranslateDetector: (context: ExecutionContext) => boolean;
 
   contextRequestDetector: (context: ExecutionContext) => Request;
   contextLocaleDetector: (context: ExecutionContext) => string;

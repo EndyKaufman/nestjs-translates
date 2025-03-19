@@ -213,4 +213,41 @@ describe('AppController (e2e)', () => {
         total: 1,
       });
   });
+
+  it('Get object with @SkipTranslate decorator (language: ru)', () => {
+    return request(app.getHttpServer())
+      .get('/skip-translate-object')
+      .set({ [ACCEPT_LANGUAGE]: 'ru' })
+      .expect(200)
+      .expect({
+        items: [
+          {
+            id: 1,
+            word: 'word',
+            wordLocale: {
+              ru: 'слово',
+            },
+          },
+        ],
+        total: 1,
+      });
+  });
+
+  it('Get object with @SkipTranslate decorator (language: en)', () => {
+    return request(app.getHttpServer())
+      .get('/skip-translate-object')
+      .expect(200)
+      .expect({
+        items: [
+          {
+            id: 1,
+            word: 'word',
+            wordLocale: {
+              ru: 'слово',
+            },
+          },
+        ],
+        total: 1,
+      });
+  });
 });
