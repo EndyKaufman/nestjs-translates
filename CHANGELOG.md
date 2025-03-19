@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.3...v2.2.0) (2025-03-19)
+
+### Features
+
+- add SkipTranslate decorator for exclude translate results, add skipTranslateDetector for write custom logic for skip translate results ([294cb1a](https://github.com/EndyKaufman/nestjs-translates/commit/294cb1a6208f0b49706d5aca75e0daee3bfad969))
+
 ### [2.1.3](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.2...v2.1.3) (2025-03-19)
 
 ### Bug Fixes
