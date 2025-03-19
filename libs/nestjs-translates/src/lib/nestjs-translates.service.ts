@@ -13,6 +13,9 @@ export class TranslatesService {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   translate(key: string, locale: string, context: any = {}) {
+    if (!key) {
+      return key;
+    }
     const value =
       (this.translatesStorage.translates[locale] &&
         this.translatesStorage.translates[locale][key]) ||
@@ -27,6 +30,9 @@ export class TranslatesService {
     depth = 10
   ) {
     if (depth === 0) {
+      return oldData;
+    }
+    if (!oldData) {
       return oldData;
     }
     if (Array.isArray(oldData)) {
