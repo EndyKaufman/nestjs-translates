@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { render } from 'mustache';
 import { TranslatesConfig } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
+import { isValidDate } from './utils/is-valid-date';
 
 @Injectable()
 export class TranslatesService {
@@ -35,6 +36,16 @@ export class TranslatesService {
     if (!oldData) {
       return oldData;
     }
+    if (
+      typeof oldData === 'string' ||
+      typeof oldData === 'number' ||
+      typeof oldData === 'function'
+    ) {
+      return oldData;
+    }
+    if (isValidDate(oldData)) {
+      return oldData;
+    }
     if (Array.isArray(oldData)) {
       const data = [...oldData];
       const newArray: unknown[] = [];
@@ -42,13 +53,6 @@ export class TranslatesService {
         newArray.push(this.translateObject(item, lang, depth - 1));
       }
       return newArray;
-    }
-    if (
-      typeof oldData === 'string' ||
-      typeof oldData === 'number' ||
-      typeof oldData === 'function'
-    ) {
-      return oldData;
     }
     try {
       if (typeof oldData === 'object') {
