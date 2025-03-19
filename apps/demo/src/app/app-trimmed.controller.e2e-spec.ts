@@ -21,6 +21,7 @@ describe('AppController (e2e)', () => {
       imports: [
         TranslatesModule.forRoot(
           getDefaultTranslatesModuleOptions({
+            trimLocaleOptions: true,
             localePaths: [
               join(__dirname, '..', 'assets', 'i18n'),
               join(
@@ -192,9 +193,6 @@ describe('AppController (e2e)', () => {
           {
             id: 1,
             word: 'слово',
-            wordLocale: {
-              ru: 'слово',
-            },
           },
         ],
         total: 1,
@@ -210,9 +208,6 @@ describe('AppController (e2e)', () => {
           {
             id: 1,
             word: 'word',
-            wordLocale: {
-              ru: 'слово',
-            },
           },
         ],
         total: 1,

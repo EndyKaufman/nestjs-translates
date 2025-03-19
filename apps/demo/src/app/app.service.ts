@@ -10,4 +10,17 @@ export class AppService {
   getServiceWord() {
     return this.asyncLocalStorage.get().translate('word two');
   }
+
+  getObject() {
+    return {
+      items: [
+        {
+          id: 1,
+          word: 'word',
+          wordLocale: { ru: 'слово' },
+        },
+      ],
+      total: 1,
+    };
+  }
 }

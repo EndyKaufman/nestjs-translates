@@ -24,6 +24,11 @@ export class AppController {
     return this.translatesService.translate('word', 'ru');
   }
 
+  @Get('object')
+  object() {
+    return this.appService.getObject();
+  }
+
   @Get('translate-word')
   translateWord(@InjectTranslateFunction() getText: TranslateFunction) {
     return getText('word two');

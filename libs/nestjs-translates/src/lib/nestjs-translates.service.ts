@@ -22,14 +22,15 @@ export class TranslatesService {
 
   translateObject(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: Record<string, any> | Record<string, any>[],
+    oldData: Record<string, any> | Record<string, any>[],
     lang: string,
     depth = 10
   ) {
     if (depth === 0) {
-      return data;
+      return oldData;
     }
-    if (Array.isArray(data)) {
+    if (Array.isArray(oldData)) {
+      const data = [...oldData];
       const newArray: unknown[] = [];
       for (const item of data) {
         newArray.push(this.translateObject(item, lang, depth - 1));
@@ -37,29 +38,46 @@ export class TranslatesService {
       return newArray;
     }
     if (
-      typeof data === 'string' ||
-      typeof data === 'number' ||
-      typeof data === 'function'
+      typeof oldData === 'string' ||
+      typeof oldData === 'number' ||
+      typeof oldData === 'function'
     ) {
-      return data;
+      return oldData;
     }
     try {
-      if (typeof data === 'object') {
+      if (typeof oldData === 'object') {
+        const data = { ...oldData };
         const keys = Object.keys(data);
         for (const key of keys) {
-          const localKey = `${key}Locale`;
-          if (keys.includes(localKey)) {
-            if (localKey in data && data[localKey]?.[lang]) {
-              data[key] = data?.[localKey]?.[lang];
-            } else {
-              data[key] = this.translate(data[key], lang) || data[key];
+          const localeKeys = !this.translatesConfig?.localeOptionsKeyResolver
+            ? [`${key}Locale`]
+            : this.translatesConfig?.localeOptionsKeyResolver(key);
+          const localeKeyArray = Array.isArray(localeKeys)
+            ? localeKeys
+            : [localeKeys];
+
+          if (keys.find((key) => localeKeyArray.includes(key))) {
+            for (const localKey of localeKeyArray) {
+              if (localKey in data) {
+                if (data[localKey]?.[lang]) {
+                  data[key] = data?.[localKey]?.[lang];
+                }
+                if (this.translatesConfig?.trimLocaleOptions) {
+                  delete data[localKey];
+                }
+              } else {
+                data[key] = this.translate(data[key], lang) || data[key];
+              }
             }
+          } else {
+            data[key] = this.translateObject(data[key], lang, depth - 1);
           }
         }
+        return data;
       }
     } catch (err) {
       this.logger.error(err, err.stack);
     }
-    return data;
+    return oldData;
   }
 }
