@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.1.3](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.2...v2.1.3) (2025-03-19)
+
+### Bug Fixes
+
+- update for correct recursive translate object ([dfc4542](https://github.com/EndyKaufman/nestjs-translates/commit/dfc45426348a29282d7e6d40ba07f4cfc7226345))
+
 ### [2.1.2](https://github.com/EndyKaufman/nestjs-translates/compare/v2.1.1...v2.1.2) (2025-02-24)
 
 ### Bug Fixes
