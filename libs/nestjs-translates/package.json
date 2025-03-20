@@ -34,7 +34,8 @@
     "reflect-metadata": "*",
     "class-validator": "*",
     "class-transformer": "*",
-    "class-validator-multi-lang": "*"
+    "class-validator-multi-lang": "*",
+    "rxjs": "*"
   },
   "dependencies": {
     "tslib": "^2.0.0"
