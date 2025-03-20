@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.5](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.4...v2.2.5) (2025-03-20)
+
+### Bug Fixes
+
+- add check properties to writable ([c6c0165](https://github.com/EndyKaufman/nestjs-translates/commit/c6c016585a33115dafefc45eb2a3cb76d60fb95a))
+
 ### [2.2.4](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.3...v2.2.4) (2025-03-20)
 
 ### Bug Fixes
