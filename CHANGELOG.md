@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.3](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.2...v2.2.3) (2025-03-20)
+
+### Bug Fixes
+
+- move rxjs to peerDependencies ([d6229e9](https://github.com/EndyKaufman/nestjs-translates/commit/d6229e923f932eceb12230d0913bf9ac9719708a))
+
 ### [2.2.2](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.1...v2.2.2) (2025-03-19)
 
 ### Bug Fixes
