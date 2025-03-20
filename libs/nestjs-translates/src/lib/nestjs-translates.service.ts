@@ -3,6 +3,7 @@ import { render } from 'mustache';
 import { TranslatesConfig } from './nestjs-translates.config';
 import { TranslatesStorage } from './nestjs-translates.storage';
 import { isValidDate } from './utils/is-valid-date';
+import { isWritable } from './utils/is-writable';
 
 @Injectable()
 export class TranslatesService {
@@ -73,17 +74,23 @@ export class TranslatesService {
             for (const localKey of localeKeyArray) {
               if (localKey in data) {
                 if (data[localKey]?.[lang]) {
-                  data[key] = data?.[localKey]?.[lang];
+                  if (isWritable(data, key)) {
+                    data[key] = data?.[localKey]?.[lang];
+                  }
                 }
                 if (this.translatesConfig?.trimLocaleOptions) {
                   delete data[localKey];
                 }
               } else {
-                data[key] = this.translate(data[key], lang) || data[key];
+                if (isWritable(data, key)) {
+                  data[key] = this.translate(data[key], lang) || data[key];
+                }
               }
             }
           } else {
-            data[key] = this.translateObject(data[key], lang, depth - 1);
+            if (isWritable(data, key)) {
+              data[key] = this.translateObject(data[key], lang, depth - 1);
+            }
           }
         }
         return data;

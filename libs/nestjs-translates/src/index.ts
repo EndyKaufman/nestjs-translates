@@ -14,4 +14,5 @@ export * from './lib/utils/get-first-dashed-words';
 export * from './lib/utils/get-global.util';
 export * from './lib/utils/get-text';
 export * from './lib/utils/is-valid-date';
+export * from './lib/utils/is-writable';
 export * from './lib/utils/request-locale-detector';
