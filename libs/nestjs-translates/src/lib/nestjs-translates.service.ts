@@ -26,37 +26,40 @@ export class TranslatesService {
 
   translateObject(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    oldData: Record<string, any> | Record<string, any>[],
+    data: Record<string, any> | Record<string, any>[],
     lang: string,
     depth = 10
   ) {
     if (depth === 0) {
-      return oldData;
+      return data;
     }
-    if (!oldData) {
-      return oldData;
+
+    if (!data) {
+      return data;
     }
+
     if (
-      typeof oldData === 'string' ||
-      typeof oldData === 'number' ||
-      typeof oldData === 'function'
+      typeof data === 'string' ||
+      typeof data === 'number' ||
+      typeof data === 'function'
     ) {
-      return oldData;
+      return data;
     }
-    if (isValidDate(oldData)) {
-      return oldData;
+
+    if (isValidDate(data)) {
+      return data;
     }
-    if (Array.isArray(oldData)) {
-      const data = [...oldData];
+
+    if (Array.isArray(data)) {
       const newArray: unknown[] = [];
       for (const item of data) {
         newArray.push(this.translateObject(item, lang, depth - 1));
       }
       return newArray;
     }
+
     try {
-      if (typeof oldData === 'object') {
-        const data = { ...oldData };
+      if (typeof data === 'object') {
         const keys = Object.keys(data);
         for (const key of keys) {
           const localeKeys = !this.translatesConfig?.localeOptionsKeyResolver
@@ -88,6 +91,6 @@ export class TranslatesService {
     } catch (err) {
       this.logger.error(err, err.stack);
     }
-    return oldData;
+    return data;
   }
 }
