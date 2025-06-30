@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.8](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.7...v2.2.8) (2025-06-30)
+
+### Bug Fixes
+
+- errors on try get X_SKIP_TRANSLATE header ([98ca732](https://github.com/EndyKaufman/nestjs-translates/commit/98ca732f91ec828495d512d17c0b463367ee8b76))
+
 ### [2.2.7](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.5...v2.2.7) (2025-06-30)
 
 ### [2.2.6](https://github.com/EndyKaufman/nestjs-translates/compare/v2.2.5...v2.2.6) (2025-06-30)
