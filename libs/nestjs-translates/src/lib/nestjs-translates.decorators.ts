@@ -45,7 +45,7 @@ export const InjectTranslateFunction = createParamDecorator(
       translatesConfig: TranslatesConfig;
     }>().translatesConfig.contextRequestDetector(ctx);
 
-    if (req.headers[X_SKIP_TRANSLATE]) {
+    if (req?.headers?.[X_SKIP_TRANSLATE]) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
       return (word: string, context: any = {}) => word;
     }

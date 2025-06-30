@@ -39,9 +39,11 @@ export class TranslatesInterceptor implements NestInterceptor {
     const locale =
       this.translatesConfig.requestLocaleDetector(req) ||
       this.translatesConfig.defaultLocale;
-    const skipTranslate = this.translatesConfig.skipTranslateDetector
-      ? this.translatesConfig.skipTranslateDetector(context)
-      : skipTranslateMetadata || req.headers[X_SKIP_TRANSLATE];
+    const skipTranslate = Boolean(
+      this.translatesConfig.skipTranslateDetector
+        ? this.translatesConfig.skipTranslateDetector(context)
+        : skipTranslateMetadata || req?.headers?.[X_SKIP_TRANSLATE]
+    );
     const store = {
       skipTranslate,
       config: this.translatesConfig,
